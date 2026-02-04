@@ -1,10 +1,15 @@
 import time
+import numpy as np
 
 choix =0
+second_choix = 0
 Categories= []
 Entries = []
 Prices = []
 
+
+
+#this function is to delete a line in the text file using the check methode "if it exist then dont write it"
 def fileUpdate(string_deleted):
 
     with open("Data.txt", "r") as f:
@@ -42,7 +47,8 @@ def menu(): #this is the memu bar shown in the beginning
     print("4. Show Entry")
     print("5. Add Entry")
     print("6. Remove Entry")
-    print("7. Close")
+    print("7. Calculate")
+    print("8. Close")
     print("===============================")
 
 
@@ -96,11 +102,32 @@ def RemoveEntries(indice,element):#to remove the entries
         Entries[indice].remove(element)
         print('Entry removed : ', element)
 
+def Calculate_menu():
+    print("==============================")
+    print("Calculate Menu")
+    print("==============================")
+    print("1. Sum of a Category")
+    print("2. Sum of everything")
+    print("3. Average of a Category")
+    print("4. Average of everything")
+    print("5. the rest")
+    print("6. Exit")
+    print("==============================")
+
+def SumOfCategory(Categ_indices):
+    array_price = np.array(Prices)
+    array_price = array_price.astype(float)
+    sumOfCategory = array_price[Categ_indices].sum()
+    print("Sum of category: ", sumOfCategory)
+
+def SumOfeverything():
+    array_price = np.array(Prices)
+    array_price = array_price.astype(float)
+    SumOfEverything = array_price.sum()
+    print(f"Sum of everything: {SumOfEverything}" )
 
 
-
-
-while choix!=7: #to close when I click 7
+while choix!=8:#to close when I click 8
     menu()
     choix = int(input("Enter your choice: "))
 
@@ -143,6 +170,23 @@ while choix!=7: #to close when I click 7
         else:
             print("Invalid choice")
             time.sleep(2)
+    elif choix == 7:
+        Calculate_menu()
+        while second_choix != 5:
+            second_choix = int(input("Enter your choice: "))
+            if second_choix == 1:
+                show_categories()
+                Categ_indices = input("select your category: ")
+                if Categ_indices in Categories:
+                    ind = Categories.index(Categ_indices)
+                    SumOfCategory(ind)
+            elif second_choix == 2:
+                SumOfeverything()
+
+
+
+
+
 
 f.close()
 
