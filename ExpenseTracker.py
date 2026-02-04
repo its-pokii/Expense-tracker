@@ -5,11 +5,21 @@ Categories= []
 Entries = []
 Prices = []
 
+def fileUpdate(string_deleted):
+
+    with open("Data.txt", "r") as f:
+        lines = f.readlines()
+    with open("Data.txt", "w") as f:
+        for line in lines:
+            if  string_deleted not in line:
+                f.write(line)
+        print("file updated")
+
+
 f = open("Data.txt",'r+')
 info_lines = f.readlines()
 for line in info_lines:
     details = line.split("|")
-    print(details)
     if details[0] in Categories:
         ind = Categories.index(details[0])
         Entries[ind].append(details[1])
@@ -46,11 +56,25 @@ def addCategories(NewElement): #to add a new category
     print('Category added : ', NewElement)
 
 
-def removeCategories(Element): #to remove the categories I don't want
+def removeCategories(Element): #to remove categories
     print("Categories: ", Categories)
     if Element in Categories:
+        ind = Categories.index(Element)
+        Entries.remove(Entries[ind])
+        Prices.remove(Prices[ind])
         Categories.remove(Element)
         print("Category removed: ", Categories)
+
+def showEntries():
+    show_categories()
+    Categ_indices = input("select your category: ")
+    if Categ_indices in Categories:
+        ind = Categories.index(Categ_indices)  # to get the index of the category
+        for i in range(len(Entries[ind])):
+            print(Entries[ind][i]," with ",Prices[ind][i])
+    else:
+        print("Invalid choice")
+        time.sleep(2)
 
 def AddEntries(indice,element,price): #to add new entries
     Entries[indice].append(element)
@@ -67,9 +91,14 @@ def AddEntries(indice,element,price): #to add new entries
 
 def RemoveEntries(indice,element):#to remove the entries
     if element in Entries[indice]:
+        tempInd = Entries[indice].index(element)
+        Prices[indice].pop(tempInd)
         Entries[indice].remove(element)
-        Prices[indice].remove(element)
         print('Entry removed : ', element)
+
+
+
+
 
 while choix!=7: #to close when I click 7
     menu()
@@ -78,8 +107,6 @@ while choix!=7: #to close when I click 7
     if choix == 1: #1.show categories
         show_categories()
         time.sleep(1)
-
-
     elif choix == 2: #2.Add Category
         newElement = input("Enter Category you want to add: ")
         addCategories(newElement)
@@ -87,17 +114,11 @@ while choix!=7: #to close when I click 7
     elif choix == 3: #3.Remove Category
         Element = input("Enter Category you want to remove: ")
         removeCategories(Element)
+        fileUpdate(Element)
         time.sleep(1)
 
     elif choix == 4: #4.Show Entry
-        show_categories()
-        Categ_indices = input("select your category: ")
-        if Categ_indices in Categories:
-            ind = Categories.index(Categ_indices) #to get the index of the category
-            print(Entries[ind])
-        else:
-            print("Invalid choice")
-            time.sleep(2)
+        showEntries()
 
     elif choix == 5: #5.Add Entry
         show_categories()
@@ -117,8 +138,11 @@ while choix!=7: #to close when I click 7
             ind = Categories.index(Categ_indices)
             Entry = input("Enter Entry you want to remove: ")
             RemoveEntries(ind, Entry)
+            fileEntry = f"{Categ_indices}|{Entry}"
+            fileUpdate(fileEntry)
         else:
             print("Invalid choice")
             time.sleep(2)
 
 f.close()
+
