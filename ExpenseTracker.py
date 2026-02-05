@@ -1,4 +1,6 @@
 import time
+from itertools import count
+
 import numpy as np
 
 choix =0
@@ -126,6 +128,33 @@ def SumOfeverything():
     SumOfEverything = array_price.sum()
     print(f"Sum of everything: {SumOfEverything}" )
 
+def AvgOfCategory(Categ_indices):
+    array_price = np.array(Prices)
+    array_price = array_price.astype(float)
+    sumOfCategory = array_price[Categ_indices].sum()
+    AvgOfCategory = sumOfCategory / (len(Prices[Categ_indices])-1)
+    print(f"Average of category: {AvgOfCategory}" )
+
+def AvgOfEverything():
+    temp = []
+    array_price = np.array(Prices)
+    array_price = array_price.astype(float)
+    SumOfEverything = array_price.sum()
+    for i in range(len(Categories)):
+        temp.append(len(Prices[i])-1)
+    tempArray = np.array(temp)
+    Sumoftemp = tempArray.sum()
+    GeneralAverage = SumOfEverything / Sumoftemp
+    print(f"Average of everything: {GeneralAverage}" )
+
+def theRest(rest):
+    array_price = np.array(Prices)
+    array_price = array_price.astype(float)
+    SumOfEverything = array_price.sum()
+    result = rest - SumOfEverything
+    print(f"you have left {result}" )
+
+
 
 while choix!=8:#to close when I click 8
     menu()
@@ -172,7 +201,7 @@ while choix!=8:#to close when I click 8
             time.sleep(2)
     elif choix == 7:
         Calculate_menu()
-        while second_choix != 5:
+        while second_choix != 6:
             second_choix = int(input("Enter your choice: "))
             if second_choix == 1:
                 show_categories()
@@ -182,11 +211,17 @@ while choix!=8:#to close when I click 8
                     SumOfCategory(ind)
             elif second_choix == 2:
                 SumOfeverything()
-
-
-
-
+            elif second_choix == 3:
+                show_categories()
+                Categ_indices = input("select your category: ")
+                if Categ_indices in Categories:
+                    ind = Categories.index(Categ_indices)
+                    AvgOfCategory(ind)
+            elif second_choix == 4:
+                AvgOfEverything()
+            elif second_choix == 5:
+                amount = int(input("Enter amount you have: "))
+                theRest(amount)
 
 
 f.close()
-
